@@ -1,11 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createMemoryHistory } from "history";
+import { createMemoryHistory, createBrowserHistory } from "history";
 import App from './App';
 
 // Mount function to start up the app
-const mount = (el, { onNavigate }) => {
-  const history = createMemoryHistory();
+const mount = (el, { onNavigate, defaultHistory }) => {
+  const history = defaultHistory || createMemoryHistory();
+  // if we are given default history lets use it, otherwise use createMemoryHistory
+  // default history is given only in development mode
   // history object that cames back from calling createMemoryHistory has an event listener tied to it called "listen()"
   // console.log(history);
   // Whenever navigation "navigation === chenges in url path" occures history.listen() will call function onNavigate
@@ -42,7 +44,7 @@ if (process.env.NODE_ENV === 'development') {
   const devRoot = document.querySelector('#_marketing-dev-root');
 
   if (devRoot) {
-    mount(devRoot, {});
+    mount(devRoot, { defaultHistory: createBrowserHistory});
   }
 }
 
